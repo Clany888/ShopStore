@@ -1,0 +1,66 @@
+{% extends 'admin/public/base.html' %}
+
+{% block con-header %}
+<div class="container-fluid am-cf">
+    <div class="row">
+        <div class="am-u-sm-12 am-u-md-12 am-u-lg-9">
+            <div class="page-header-heading">
+                <span class="am-icon-user page-header-heading-icon"></span> 
+                商品分类编辑 </div>
+        </div>
+</div>
+</div>
+{% endblock %}
+
+{% block con-body %}
+<div class="row-content am-cf">
+    
+    <div class="row">
+        <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+            <div class="widget am-cf">
+                <div class="widget-body am-fr">
+                    
+                    <form action="{% url 'admin_types_update' %}" method="post" enctype="multipart/form-data" class="am-form tpl-form-line-form">
+                        
+                        <div class="am-form-group">
+                            <label for="user-name" class="am-u-sm-3 am-form-label">
+                                所属分类
+                            </label>
+                            <select name="pid" data-am-selected="{btnSize: 'sm'}" style="display: none;">
+                              {% for v in tlist %}
+                                  {% if tinfo.pid == v.id %}
+                                    <option value="{{ v.id }}" selected >{{ v.name }}</option>
+                                  {% else %}
+                                    <option value="{{ v.id }}" disabled >{{ v.name }}</option>
+                                  {% endif %}
+                              {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label for="user-name" class="am-u-sm-3 am-form-label">
+                                商品分类名称
+                            </label>
+                            <div class="am-u-sm-9">
+                                <input type="text" name="name" value="{{ tinfo.name }}" class="tpl-form-input" id="user-name" 
+                                placeholder="商品分类名称">
+                            </div>
+                        </div>
+
+                        
+                        {% csrf_token %}
+                        <input type="hidden" name="tid" value="{{ tinfo.id }}">
+                        <div class="am-form-group">
+                            <div class="am-u-sm-9 am-u-sm-push-3">
+                            <button class="am-btn am-btn-primary tpl-btn-bg-color-success ">提交</button></div>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
