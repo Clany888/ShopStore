@@ -1,0 +1,165 @@
+{% extends 'admin/public/base.html' %}
+
+{% block con-header %}
+<div class="container-fluid am-cf">
+    <div class="row">
+        <div class="am-u-sm-12 am-u-md-12 am-u-lg-9">
+            <div class="page-header-heading">
+                <span class="am-icon-user page-header-heading-icon"></span> 
+                会员列表 </div>
+        </div>
+</div>
+</div>
+{% endblock %}
+
+{% block con-body %}
+<div class="row-content am-cf">
+    <div class="row">
+        <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+            <div class="widget am-cf">
+               
+                <div class="widget-body  am-fr">
+
+                    <div class="am-u-sm-12 am-u-md-6 am-u-lg-6">
+                        <div class="am-form-group">
+                            <div class="am-btn-toolbar">
+                                <div class="am-btn-group am-btn-group-xs">
+                                    <button type="button" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增</button>
+                                    <button type="button" class="am-btn am-btn-default am-btn-secondary"><span class="am-icon-save"></span> 保存</button>
+                                    <button type="button" class="am-btn am-btn-default am-btn-warning"><span class="am-icon-archive"></span> 审核</button>
+                                    <button type="button" class="am-btn am-btn-default am-btn-danger"><span class="am-icon-trash-o"></span> 删除</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <!-- 搜索功能 -->
+                <form>
+                    <div class="am-u-sm-12 am-u-md-6 am-u-lg-3">
+                        <div class="am-form-group tpl-table-list-select">
+                            <select name="type" data-am-selected="{btnSize: 'sm'}" style="display: none;">
+                              <option {% if request.GET.type == 'all' %} selected {% endif %} value="all">全部条件</option>
+                              <option {% if request.GET.type == 'username' %} selected {% endif %} value="username">用户名</option>
+                              <option {% if request.GET.type == 'email' %} selected {% endif %} value="email">邮箱</option>
+                              <option {% if request.GET.type == 'phone' %} selected {% endif %} value="phone">手机号</option>
+                              <option {% if request.GET.type == 'age' %} selected {% endif %} value="age">年龄</option>
+                              <option {% if request.GET.type == 'sex' %} selected {% endif %} value="sex">性别</option>
+                              <option {% if request.GET.type == 'status' %} selected {% endif %} value="status">状态</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="am-u-sm-12 am-u-md-12 am-u-lg-3">
+                        <div class="am-input-group am-input-group-sm tpl-form-border-form cl-p">
+                            <input name="keywords" type="text" class="am-form-field" value="{{ request.GET.keywords }}">
+                            <span class="am-input-group-btn">
+                            <button class="am-btn  am-btn-default am-btn-success tpl-table-list-field am-icon-search"></button>
+                            </span>
+                        </div>
+                    </div>
+                </form>
+
+
+                    <div class="am-u-sm-12">
+                        <table width="100%" class="am-table am-table-compact am-table-striped tpl-table-black ">
+                            <thead>
+                                <tr>
+                                    <th>头像缩略图</th>
+                                    <th>ID</th>
+                                    <th>用户名</th>
+                                    <th>邮箱</th>
+                                    <th>手机号</th>
+                                    <th>年龄</th>
+                                    <th>性别</th>
+                                    <th>注册时间</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for v in ulist %}
+                                <tr class="gradeX">
+                                    <td>
+                                        <img src="{{ v.picurl }}" class="tpl-table-line-img" alt="">
+                                    </td>
+                                    <td class="am-text-middle">{{ v.id }}</td>
+                                    <td class="am-text-middle">{{ v.username }}</td>
+                                    <td class="am-text-middle">{{ v.email }}</td>
+                                    <td class="am-text-middle">{{ v.phone }}</td>
+                                    <td class="am-text-middle">{{ v.age }}</td>
+                                    <td class="am-text-middle">{{ v.sex }}</td>
+                                    <td class="am-text-middle">{{ v.addtime|date:'Y-m-d H:i:s' }}</td>
+                                    <td class="am-text-middle">
+                                        <select uid="{{ v.id }}" class="user_status_save" style="color:#000">
+                                            <option value="0" {% if v.status == 0 %} selected {% endif %}>正常</option>
+                                            <option value="1" {% if v.status == 1 %} selected {% endif %}>禁用</option>
+                                            <option value="2" {% if v.status == 2 %} selected {% endif %}>管理员</option>
+                                        </select>
+                                    </td>
+                                   
+                                    <td class="am-text-middle">
+                                        <div class="tpl-table-black-operation">
+                                            <a href="{% url 'admin_user_edit' v.id %}">
+                                                <i class="am-icon-pencil"></i> 编辑
+                                            </a>
+                                            <a href="" class="tpl-table-black-operation-del">
+                                                <i class="am-icon-trash"></i> 删除
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                             
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="am-u-lg-12 am-cf">
+
+                        <div class="am-fr">
+                            <ul class="am-pagination tpl-pagination">
+                            
+                            {% load pagetag %}
+
+                            {% showpage ulist.paginator.num_pages request %}
+
+                            
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    // 状态修改 ajax
+    $('.user_status_save').change(function(){
+        // 获取当前选择的状态
+        s = $(this).val()
+        // 获取用户id
+        id = $(this).attr('uid')
+        // 发送ajax执行修改
+        $.get('{% url "admin_user_status" %}',{uid:id,status:s})
+    })
+
+    // 用户删除 ajax
+    $('.tpl-table-black-operation-del').click(function(){
+        a = $(this)
+        // 获取用户的id
+        uid = $(this).parents('.gradeX').find('select').attr('uid')
+        // 发送ajax,执行逻辑删除
+        $.get('{% url "admin_user_del" %}',{uid:uid},function(data){
+            // console.log(data)
+            if(data == '0'){
+                // 移除当前用户
+                // $(this).parents('tr').remove()
+                // console.log($(this))  // XMLHttpRequest
+                a.parents('tr').remove()
+
+            }
+        })
+
+        // 阻止默认行为
+        return false;
+    })
+</script>
+{% endblock %}
